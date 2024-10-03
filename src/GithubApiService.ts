@@ -48,17 +48,17 @@ export class GithubApiService {
     }
 
 
-    getUserInfoAsync(username: string) {
-        return fetch("https://api.github.com/users/" + username)
-            .then(it => it.json())
-            .then(it => new User(it));
+    async getUserInfoAsync(username: string) {
+        const it = await fetch("https://api.github.com/users/" + username);
+        const it_1 = await it.json();
+        return new User(it_1);
     }
 
 
-    getRepoInfoAsync(username: string) {
-        return fetch("https://api.github.com/users/" + username + "/repos")
-            .then(it => it.json())
-            .then(it => it.map((r: any) => new Repo(r)));
+    async getRepoInfoAsync(username: string) {
+        const it = await fetch("https://api.github.com/users/" + username + "/repos");
+        const it_1 = await it.json();
+        return it_1.map((r: any) => new Repo(r));
     }
 
 }
