@@ -28,5 +28,20 @@ githubApiService.getUserInfo(username, (user: User) => {
 });
 
 
+async function getUserWithRepo(username: string){
+    let userInfo = await githubApiService.getUserInfoAsync(username);
+    console.log("called to get userInfo ....")
+    let reposInfo = await githubApiService.getRepoInfoAsync(username);
+    console.log("called to get repoInfo ....")
+    userInfo.repos = reposInfo;
+    console.log(userInfo);
+    // console.log(reposInfo);
+}
+
+getUserWithRepo(username);
+
+
+
+
 
 

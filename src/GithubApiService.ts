@@ -11,22 +11,25 @@ const options: any = {
 }
 
 export class GithubApiService {
-    getUserInfo(userName: string, callbackF: (user: User) => any) {
-        request.get('https://api.github.com/users/' + userName, options,
+    getUserInfo(userName: string, callbackF?: (user: User) => any) {
+        return request.get('https://api.github.com/users/' + userName, options,
             (error: any, response: any, body: any) => {
                 if (error != null) {
                     console.error(error);
                 }
                 else {
                     let user = new User(body);
-                    callbackF(user);
+                    if (callbackF) {
+                        callbackF(user);
+                    }
+
                 }
 
             }
         );
     }
 
-    getRepos(userName: string, callbackF: (repos: Repo[]) => any) {
+    getRepos(userName: string, callbackF?: (repos: Repo[]) => any) {
         request.get('https://api.github.com/users/' + userName + "/repos", options,
             (error: any, response: any, body: any) => {
                 if (error != null) {
@@ -34,11 +37,28 @@ export class GithubApiService {
                 }
                 else {
                     let repos: Repo[] = body.map((it: any) => new Repo(it));
-                    callbackF(repos);
+                    if (callbackF) {
+                        callbackF(repos);
+                    }
+
                 }
 
             }
         );
+    }
+
+
+    getUserInfoAsync(username: string) {
+        return fetch("https://api.github.com/users/" + username)
+            .then(it => it.json())
+            .then(it => new User(it));
+    }
+
+
+    getRepoInfoAsync(username: string) {
+        return fetch("https://api.github.com/users/" + username + "/repos")
+            .then(it => it.json())
+            .then(it => it.map((r: any) => new Repo(r)));
     }
 
 }
